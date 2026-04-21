@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "flowbite/src/themes/default";
+/* @import "flowbite/src/flowbite.css"; */
 
 @plugin '@tailwindcss/forms';
 @plugin "flowbite/plugin";
