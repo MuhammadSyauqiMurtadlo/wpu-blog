@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class PostDashboardController extends Controller
@@ -34,6 +35,31 @@ class PostDashboardController extends Controller
      */
     public function store(Request $request)
     {
+        // validation
+        // $request->validate([
+        //     'title' => 'required|unique:posts|min:5|max:255',
+        //     'category_id' => 'required',
+        //     'body' => 'required',
+        // ]);
+
+        Validator::make($request->all(), [
+            'title' => 'required|unique:posts|min:5|max:255',
+            'category_id' => 'required',
+            'body' => 'required',
+        ], [
+            'title.required' => 'Field :attribute harus diisi',
+            'title.unique' => 'Title must be unique',
+            'title.min' => 'Title must be at least 5 characters',
+            'title.max' => 'Title must not exceed 255 characters',
+            'category_id.required' => 'Pilih salah satu :attribute',
+            'body.required' => ':attribute tidak boleh kosong',
+        ], [
+            'title' => 'Judul',
+            'category_id' => 'Kategori',
+            'body' => 'Post body',
+        ]
+        )->validate();
+
         Post::create([
             'title' => $request->title,
             'slug' => Str::slug($request->title),
@@ -42,7 +68,9 @@ class PostDashboardController extends Controller
             'body' => $request->body,
             ]);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')->with([
+            'success' => 'Post created successfully'
+        ]);
     }
 
     /**
