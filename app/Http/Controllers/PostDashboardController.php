@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller; // tambahkan ini
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,7 @@ class PostDashboardController extends Controller
         if (request('keyword')) {
             $posts->where('title', 'like', '%' . request('keyword') . '%');
         }
-        return view('dashboard.index', ['posts'=> $posts->paginate(5)->withQueryString(1)]);
+        return view('dashboard.index', ['posts'=> $posts->paginate(5)->withQueryString()]);
     }
 
     /**
@@ -100,8 +101,11 @@ class PostDashboardController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('dashboard')->with([
+            'success' => 'Post deleted successfully'
+        ]);
     }
 }
