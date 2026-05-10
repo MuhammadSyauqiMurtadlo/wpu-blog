@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller; // tambahkan ini
+// tambahkan ini
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,9 +18,10 @@ class PostDashboardController extends Controller
     {
         $posts = Post::latest()->where('author_id', Auth::user()->id);
         if (request('keyword')) {
-            $posts->where('title', 'like', '%' . request('keyword') . '%');
+            $posts->where('title', 'like', '%'.request('keyword').'%');
         }
-        return view('dashboard.index', ['posts'=> $posts->paginate(5)->withQueryString()]);
+
+        return view('dashboard.index', ['posts' => $posts->paginate(5)->withQueryString()]);
     }
 
     /**
@@ -46,7 +47,7 @@ class PostDashboardController extends Controller
         Validator::make($request->all(), [
             'title' => 'required|unique:posts|min:5|max:255',
             'category_id' => 'required',
-            'body' => 'required',
+            'body' => 'required|min:20',
         ], [
             'title.required' => 'Field :attribute harus diisi',
             'title.unique' => 'Title must be unique',
@@ -54,6 +55,7 @@ class PostDashboardController extends Controller
             'title.max' => 'Title must not exceed 255 characters',
             'category_id.required' => 'Pilih salah satu :attribute',
             'body.required' => ':attribute tidak boleh kosong',
+            'body.min' => ':attribute harus berisi 20 karakter atau lebih',
         ], [
             'title' => 'Judul',
             'category_id' => 'Kategori',
@@ -67,10 +69,10 @@ class PostDashboardController extends Controller
             'author_id' => Auth::user()->id,
             'category_id' => $request->category_id,
             'body' => $request->body,
-            ]);
+        ]);
 
         return redirect()->route('dashboard')->with([
-            'success' => 'Post created successfully'
+            'success' => 'Post created successfully',
         ]);
     }
 
@@ -97,7 +99,7 @@ class PostDashboardController extends Controller
     {
         // validation
         Validator::make($request->all(), [
-            'title' => 'required|min:5|max:255|unique:posts,title,' . $post->id,
+            'title' => 'required|min:5|max:255|unique:posts,title,'.$post->id,
             'category_id' => 'required',
             'body' => 'required',
         ]);
@@ -111,7 +113,7 @@ class PostDashboardController extends Controller
         ]);
 
         return redirect()->route('dashboard')->with([
-            'success' => 'Post updated successfully'
+            'success' => 'Post updated successfully',
         ]);
     }
 
@@ -121,8 +123,9 @@ class PostDashboardController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
+
         return redirect()->route('dashboard')->with([
-            'success' => 'Post deleted successfully'
+            'success' => 'Post deleted successfully',
         ]);
     }
 }
