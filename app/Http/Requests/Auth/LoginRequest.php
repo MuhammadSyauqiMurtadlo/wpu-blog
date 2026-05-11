@@ -13,6 +13,7 @@ use Illuminate\Validation\ValidationException;
 class LoginRequest extends FormRequest
 {
     protected $user_type;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -38,10 +39,9 @@ class LoginRequest extends FormRequest
     {
         $this->user_type = filter_var($this->string('user_cred'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         $this->merge([
-        $this->user_type => $this->string('user_cred'),
-    ]);
+            $this->user_type => $this->string('user_cred'),
+        ]);
     }
-
 
     /**
      * Attempt to authenticate the request's credentials.

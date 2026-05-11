@@ -10,8 +10,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Post extends Model
 {
     use HasFactory;
+
     //  protected $fillable = ['title', 'slug', 'author_id', 'category_id', 'body'];
     protected $guarded = ['id'];
+
     protected $with = ['author', 'category'];
 
     public function author(): BelongsTo
@@ -27,18 +29,16 @@ class Post extends Model
     public function scopeFilter(Builder $query, array $filters): void
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {
-            $query->where('title', 'like', '%' . $search . '%');
+            $query->where('title', 'like', '%'.$search.'%');
         });
 
         $query->when($filters['category'] ?? false, function ($query, $category) {
-            $query->whereHas('category', fn (Builder $query) =>
-                $query->where('slug', $category)
+            $query->whereHas('category', fn (Builder $query) => $query->where('slug', $category)
             );
         });
 
         $query->when($filters['author'] ?? false, function ($query, $author) {
-            $query->whereHas('author', fn (Builder $query) =>
-                $query->where('username', $author)
+            $query->whereHas('author', fn (Builder $query) => $query->where('username', $author)
             );
         });
     }

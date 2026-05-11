@@ -46,15 +46,14 @@ class ProfileController extends Controller
         // }
 
         if ($request->avatar) {
-             if(!empty($request->user()->avatar)) {
+            if (! empty($request->user()->avatar)) {
                 // delete old avatar
                 Storage::disk('public')->delete($request->user()->avatar);
             }
             $newFileName = Str::after($request->avatar, 'tmp/');
-            Storage::disk('public')->move($request->avatar, 'img/' . $newFileName);
-            $validated['avatar'] = 'img/' . $newFileName;
+            Storage::disk('public')->move($request->avatar, 'img/'.$newFileName);
+            $validated['avatar'] = 'img/'.$newFileName;
         }
-
 
         $request->user()->update($validated);
         // $request->user()->save();
@@ -62,11 +61,13 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    public function upload(Request $request) {
+    public function upload(Request $request)
+    {
         if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('tmp', 'public');
-            }
-            return $path;
+        }
+
+        return $path;
     }
 
     /**
@@ -77,7 +78,6 @@ class ProfileController extends Controller
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);
-
         $user = $request->user();
 
         Auth::logout();

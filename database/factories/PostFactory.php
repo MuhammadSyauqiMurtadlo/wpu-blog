@@ -3,12 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
+ * @extends Factory<Post>
  */
 class PostFactory extends Factory
 {
@@ -19,13 +20,14 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-        $title = fake()->sentence(rand(6,8));
+        $title = fake()->sentence(rand(6, 8));
+
         return [
             'title' => $title,
             'author_id' => User::factory(),
             'category_id' => Category::factory(),
             'slug' => Str::slug($title),
-            'body' => fake()->text()
+            'body' => fake()->text(),
         ];
     }
 }

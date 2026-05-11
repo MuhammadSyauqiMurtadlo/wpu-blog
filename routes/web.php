@@ -9,13 +9,14 @@ Route::get('/', function () {
     return view('home', ['title' => 'Home']);
 });
 
-Route::get('/posts', function() {
+Route::get('/posts', function () {
     // $posts = Post::with('author', 'category')->latest()->get();
     $posts = Post::latest()->filter(request(['search', 'category', 'author']))->paginate(5)->withQueryString();
+
     return view('posts', ['title' => 'Blog', 'posts' => $posts]);
 });
 
-Route::get('/posts/{post:slug}', function(Post $post) {
+Route::get('/posts/{post:slug}', function (Post $post) {
     return view('post', ['title' => $post->title, 'post' => $post]);
 });
 

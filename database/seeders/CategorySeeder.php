@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
@@ -16,17 +15,17 @@ class CategorySeeder extends Seeder
         Category::create([
             'name' => 'Web Programming',
             'slug' => 'web-programming',
-            'color' => 'bg-red-100'
+            'color' => 'bg-red-100',
         ]);
         Category::create([
             'name' => 'Web Design',
             'slug' => 'web-design',
-            'color' => 'bg-green-100'
+            'color' => 'bg-green-100',
         ]);
         Category::create([
             'name' => 'Artificial Intelligence',
             'slug' => 'ai',
-            'color' => 'bg-blue-100'
+            'color' => 'bg-blue-100',
         ]);
     }
 }
